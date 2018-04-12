@@ -21,7 +21,7 @@ public class HbaseDemo {
         Get get=new Get(rowid);
         Result r=table.get(get);
         byte[] idvalue=r.getValue(Bytes.toBytes("f1"),Bytes.toBytes("id"));
-        System.out.println("----------"+idvalue.toString()+"----------");
+        System.out.println(idvalue.toString());
         conn.close();
     }
     @Test
