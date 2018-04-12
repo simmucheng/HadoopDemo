@@ -7,6 +7,7 @@
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <module name="AvroDemo" />
+        <module name="HbaseDemo" />
         <module name="hdfs" />
         <module name="HiveDemo" />
         <module name="JdbcDemo" />
@@ -16,6 +17,7 @@
     </annotationProcessing>
     <bytecodeTargetLevel>
       <module name="AvroDemo" target="1.5" />
+      <module name="HbaseDemo" target="1.5" />
       <module name="hdfs" target="1.5" />
       <module name="HiveDemo" target="1.5" />
       <module name="JdbcDemo" target="1.5" />

@@ -3,6 +3,7 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/AvroDemo/AvroDemo.iml" filepath="$PROJECT_DIR$/AvroDemo/AvroDemo.iml" />
+      <module fileurl="file://$PROJECT_DIR$/HbaseDemo/HbaseDemo.iml" filepath="$PROJECT_DIR$/HbaseDemo/HbaseDemo.iml" />
       <module fileurl="file://$PROJECT_DIR$/HiveDemo/HiveDemo.iml" filepath="$PROJECT_DIR$/HiveDemo/HiveDemo.iml" />
       <module fileurl="file://$PROJECT_DIR$/JdbcDemo/JdbcDemo.iml" filepath="$PROJECT_DIR$/JdbcDemo/JdbcDemo.iml" />
       <module fileurl="file://$PROJECT_DIR$/ProtobufDemo/ProtobufDemo.iml" filepath="$PROJECT_DIR$/ProtobufDemo/ProtobufDemo.iml" />
