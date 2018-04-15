@@ -195,17 +195,17 @@ public class HbaseDemo {
         conf.set("hbase.master", "192.168.0.110：60000");
         Connection conn=ConnectionFactory.createConnection(conf);
         Admin admin=conn.getAdmin();
-        TableName tableName=TableName.valueOf("nns2:t2");
+        TableName tableName=TableName.valueOf("nns1:t1");
         Table table=conn.getTable(tableName);
         Scan scan=new Scan();
-        scan.setStartRow(Bytes.toBytes("row0002"));
-        scan.setStopRow(Bytes.toBytes("row0005"));
+        scan.setStartRow(Bytes.toBytes("row000002"));
+        scan.setStopRow(Bytes.toBytes("row000005"));
         ResultScanner res=table.getScanner(scan);
         Iterator<Result>it=res.iterator();
         while(it.hasNext()){
             Result kk=it.next();
-            byte[] name=kk.getValue(Bytes.toBytes("f1"),Bytes.toBytes("name"));
-            System.out.println(name.toString());
+            byte[] pp=kk.getValue(Bytes.toBytes("f1"),Bytes.toBytes("id"));
+            System.out.println(String.valueOf(pp));
         }
 
     }
