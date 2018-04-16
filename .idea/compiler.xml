@@ -17,7 +17,7 @@
     </annotationProcessing>
     <bytecodeTargetLevel>
       <module name="AvroDemo" target="1.5" />
-      <module name="HbaseDemo" target="1.5" />
+      <module name="HbaseDemo" target="1.6" />
       <module name="hdfs" target="1.5" />
       <module name="HiveDemo" target="1.5" />
       <module name="JdbcDemo" target="1.5" />

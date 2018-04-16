@@ -7,6 +7,8 @@ import org.junit.Test;
 import java.io.IOException;
 import java.text.DecimalFormat;
 import java.util.Iterator;
+import java.util.Map;
+import java.util.NavigableMap;
 
 public class HbaseDemo {
     @Test
@@ -198,19 +200,89 @@ public class HbaseDemo {
         TableName tableName=TableName.valueOf("nns1:t1");
         Table table=conn.getTable(tableName);
         Scan scan=new Scan();
-        scan.setStartRow(Bytes.toBytes("row000002"));
-        scan.setStopRow(Bytes.toBytes("row000005"));
+        scan.setStartRow(Bytes.toBytes("row001001"));
+        scan.setStopRow(Bytes.toBytes("row001006"));
         ResultScanner res=table.getScanner(scan);
         Iterator<Result>it=res.iterator();
         while(it.hasNext()){
             Result kk=it.next();
             byte[] pp=kk.getValue(Bytes.toBytes("f1"),Bytes.toBytes("id"));
-            System.out.println(String.valueOf(pp));
+            System.out.println(Bytes.toString(pp));
         }
 
     }
-    @Test
-    public void scan2(){
 
+    /**
+     * 动态遍历指定rowkey范围的某一个列族所对应的所有列和对应的value值
+     */
+    @Test
+    public void scan2() throws Exception {
+        Configuration conf=HBaseConfiguration.create();
+        conf.set("hbase.zookeeper.quorum", "192.168.0.110,192.168.0.113,192.168.0.111");
+        conf.set("hbase.master", "192.168.0.110：60000");
+        Connection conn=ConnectionFactory.createConnection(conf);
+        Admin admin=conn.getAdmin();
+        TableName tableName=TableName.valueOf("nns1:t1");
+        Table table=conn.getTable(tableName);
+        Scan scan=new Scan();
+        scan.setStartRow(Bytes.toBytes("row001000"));
+        scan.setStopRow(Bytes.toBytes("row0010010"));
+        ResultScanner rscan=table.getScanner(scan);
+        Iterator<Result>it=rscan.iterator();
+        while(it.hasNext()){
+            Result r=it.next();
+            //由于是获得familymap,所以该map所对应的值为<列,value>
+            Map<byte[],byte[]>map=r.getFamilyMap(Bytes.toBytes("f1"));
+            //遍历map中的所有键值对
+            for(Map.Entry<byte[],byte[]>entrySet:map.entrySet()){
+                String col=Bytes.toString(entrySet.getKey());
+                String value=Bytes.toString(entrySet.getValue());
+                System.out.println("key:"+col+"   value:"+value);
+            }
+
+        }
+
+
+    }
+
+    /**
+     * 遍历指定列范围的所有列族和列及时间戳和对应的value值
+     * @throws IOException
+     */
+    @Test
+    public void scan3() throws IOException {
+        Configuration conf=HBaseConfiguration.create();
+        conf.set("hbase.zookeeper.quorum", "192.168.0.110,192.168.0.113,192.168.0.111");
+        conf.set("hbase.master", "192.168.0.110：60000");
+        Connection conn=ConnectionFactory.createConnection(conf);
+        Admin admin=conn.getAdmin();
+        TableName tableName=TableName.valueOf("nns1:t1");
+        Table table=conn.getTable(tableName);
+        Scan scan=new Scan();
+        scan.setStartRow(Bytes.toBytes("row001000"));
+        scan.setStopRow(Bytes.toBytes("row0010010"));
+        ResultScanner rscan=table.getScanner(scan);
+        Iterator<Result>it=rscan.iterator();
+        while(it.hasNext()){
+            Result r=it.next();
+            //得到一行的信息，其中依次的key为列族、列、时间戳
+            NavigableMap<byte[], NavigableMap<byte[], NavigableMap<Long,byte[]>>> map=r.getMap();
+            for(Map.Entry<byte[],NavigableMap<byte[],NavigableMap<Long,byte[]>>>entry:map.entrySet()){
+                byte[] familyCol=entry.getKey();
+                NavigableMap<byte[],NavigableMap<Long,byte[]>>map2 =entry.getValue();
+                for(Map.Entry<byte[],NavigableMap<Long,byte[]>>entry1:map2.entrySet()){
+                    byte[] col=entry1.getKey();
+                    NavigableMap<Long,byte[]>map3=entry1.getValue();
+                    for(Map.Entry<Long,byte[]>entry2:map3.entrySet()){
+                        long times=entry2.getKey();
+                        byte[] value=entry2.getValue();
+                        System.out.println("family = "+Bytes.toString(familyCol)+" col = "+Bytes.toString(col)
+                                +" times = "+times+" value = "+Bytes.toString(value));
+
+                    }
+                }
+
+            }
+        }
     }
 }
