@@ -1,3 +1,4 @@
+import com.huawei.cn.Util;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.hbase.*;
 import org.apache.hadoop.hbase.client.*;
@@ -284,5 +285,11 @@ public class HbaseDemo {
 
             }
         }
+    }
+    @Test
+    public void testUtil(){
+
+        String hash= Util.getRegionNo("13091909999","2018032412");
+        System.out.println(hash);
     }
 }
